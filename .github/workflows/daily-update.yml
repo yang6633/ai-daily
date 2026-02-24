@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -28,9 +28,13 @@ jobs:
         run: python update_news.py
 
       - name: Commit and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
+          git config --local credential.helper store
+          echo "https://x-access-token:$GITHUB_TOKEN@github.com" > ~/.git-credentials
           git add index.html
           git diff --staged --quiet || git commit -m "daily: update AI news $(date +%Y-%m-%d)"
           git push
