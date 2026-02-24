@@ -722,8 +722,11 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        async function callModelScopeAPI(prompt) {
+        async function callModelScopeAPI(prompt, timeout = 8000) {
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeout);
+                
                 const response = await fetch(API_CONFIG.base_url + '/chat/completions', {
                     method: 'POST',
                     headers: {
@@ -734,8 +737,11 @@
                         model: API_CONFIG.model,
                         messages: [{ role: 'user', content: prompt }],
                         temperature: 0.7
-                    })
+                    }),
+                    signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
                 
                 if (!response.ok) {
                     throw new Error(`API request failed: ${response.status}`);
@@ -774,9 +780,11 @@
 
         initTicker();
         
-        setTimeout(() => {
-            fetchAInews();
-        }, 500);
+        // 先显示mock数据，让用户立刻看到内容
+        renderNews(mockHotNews);
+        
+        // 后台调用API更新新闻
+        fetchAInews();
 
         const exportAllBtn = document.createElement('button');
         exportAllBtn.className = 'export-all-btn';
