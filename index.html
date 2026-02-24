@@ -721,22 +721,22 @@
             const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent('https://yang6633.github.io/ai-daily/')}`;
             
             content.innerHTML = `
-                <div style="background: linear-gradient(135deg, #0a0a0f 0%, #12121a 100%); padding: 2rem; border-radius: 16px; border: 1px solid rgba(0, 240, 255, 0.2);">
+                <div style="background: linear-gradient(135deg, #0a0a0f 0%, #12121a 100%); padding: 1rem; border-radius: 16px; border: 1px solid rgba(0, 240, 255, 0.2);">
                     <div style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: #00f0ff; margin-bottom: 0.5rem; letter-spacing: 3px; text-align: center;">AI DAILY</div>
-                    <div style="color: #8888aa; margin-bottom: 2rem; text-align: center;">${getToday()} AI五大热点</div>
+                    <div style="color: #8888aa; margin-bottom: 1rem; text-align: center;">${getToday()} AI五大热点</div>
                     ${top5News.map(news => `
-                        <div class="export-news-card" style="margin: 0 0 1rem 0; background: rgba(18, 18, 26, 0.8);">
-                            <div style="font-family: 'Orbitron', sans-serif; font-size: 2rem; color: rgba(0, 240, 255, 0.15); position: absolute; right: 1rem; top: 1rem;">${news.rank}</div>
-                            <h3 style="font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem; padding-right: 3rem;">${news.title}</h3>
-                            <p style="font-size: 0.85rem; color: #8888aa; line-height: 1.5;">${news.summary.substring(0, 80)}...</p>
-                            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #00f0ff;">${news.source}</div>
+                        <div class="export-news-card" style="margin: 0 0 0.8rem 0; background: rgba(18, 18, 26, 0.8);">
+                            <div style="font-family: 'Orbitron', sans-serif; font-size: 1.8rem; color: rgba(0, 240, 255, 0.15); position: absolute; right: 0.5rem; top: 0.5rem;">${news.rank}</div>
+                            <h3 style="font-size: 0.95rem; font-weight: 500; margin-bottom: 0.4rem; padding-right: 2.5rem;">${news.title}</h3>
+                            <p style="font-size: 0.8rem; color: #8888aa; line-height: 1.4;">${news.summary.substring(0, 70)}...</p>
+                            <div style="margin-top: 0.4rem; font-size: 0.7rem; color: #00f0ff;">${news.source}</div>
                         </div>
                     `).join('')}
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(0, 240, 255, 0.1);">
-                        <img src="${qrCodeUrl}" alt="QR Code" style="width: 100px; height: 100px; border-radius: 8px;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0, 240, 255, 0.1);">
+                        <img src="${qrCodeUrl}" alt="QR Code" style="width: 80px; height: 80px; border-radius: 8px;">
                         <div style="text-align: left;">
-                            <div style="color: #00f0ff; font-size: 1rem; font-weight: 500; margin-bottom: 0.3rem;">扫码查看更多</div>
-                            <div style="color: #8888aa; font-size: 0.8rem;">AI前沿资讯每日更新</div>
+                            <div style="color: #00f0ff; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.2rem;">扫码查看更多</div>
+                            <div style="color: #8888aa; font-size: 0.75rem;">AI前沿资讯每日更新</div>
                         </div>
                     </div>
                 </div>
