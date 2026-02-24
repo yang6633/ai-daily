@@ -520,22 +520,25 @@
         ];
 
         const sourceUrls = {
-            'OpenAI': 'https://openai.com/blog',
-            'DeepMind': 'https://deepmind.google/research/publications',
-            'Meta AI': 'https://ai.meta.com/blog',
-            'NVIDIA': 'https://www.nvidia.com/en-us/',
-            'Anthropic': 'https://www.anthropic.com',
+            'OpenAI': 'https://www.jiqizhixin.com/',
+            'DeepMind': 'https://www.36kr.com/information/AI/',
+            'Meta AI': 'https://www.zhihu.com/topic/人工智能/hot',
+            'NVIDIA': 'https://new.qq.com/omn/AI.html',
+            'Anthropic': 'https://www.qbitai.com/',
             '百度': 'https://ai.baidu.com/',
-            'Stability AI': 'https://stability.ai/blog',
-            'Tesla': 'https://www.tesla.com/ai',
-            'Microsoft': 'https://www.microsoft.com/en-us/ai',
+            'Stability AI': 'https://www.36kr.com/information/AI/',
+            'Tesla': 'https://tech.sina.com.cn/ai/',
+            'Microsoft': 'https://tech.163.com/',
             '阿里巴巴': 'https://tongyi.aliyun.com/',
-            '腾讯': 'https://ai.tencent.com/',
+            '腾讯': 'https://new.qq.com/omn/AI.html',
             '字节跳动': 'https://www.bytedance.com/zh/',
             '知乎': 'https://www.zhihu.com/topic/人工智能/hot',
             '机器之心': 'https://www.jiqizhixin.com/',
             '36氪': 'https://www.36kr.com/information/AI/',
-            '量子位': 'https://www.qbitai.com/'
+            '量子位': 'https://www.qbitai.com/',
+            '新浪科技': 'https://tech.sina.com.cn/ai/',
+            '网易科技': 'https://tech.163.com/',
+            '阿里云': 'https://tongyi.aliyun.com/'
         };
 
         const mockHotNews = [
@@ -543,81 +546,71 @@
                 rank: 1,
                 title: 'OpenAI GPT-5正式发布：多模态能力大幅提升',
                 summary: 'OpenAI正式发布GPT-5，新版本在推理能力、多模态理解和生成方面取得重大突破。据官方介绍，GPT-5的参数规模达到10万亿，训练数据量超过100万亿token。',
-                source: 'OpenAI',
-                url: 'https://openai.com/blog/gpt-5',
-                date: '2026-02-22'
+                source: '机器之心',
+                url: 'https://www.jiqizhixin.com/'
             },
             {
                 rank: 2,
                 title: 'Google DeepMind发布AlphaFold 4：蛋白质结构预测准确率接近100%',
                 summary: 'Google DeepMind宣布推出AlphaFold 4，该版本能够准确预测蛋白质与其他分子的相互作用，为药物研发提供更强大的工具。',
-                source: 'DeepMind',
-                url: 'https://deepmind.google/research/publications',
-                date: '2026-02-22'
+                source: '36氪',
+                url: 'https://www.36kr.com/information/AI/'
             },
             {
                 rank: 3,
                 title: 'Meta开源Llama 4：性能超越GPT-4，完全免费商用',
                 summary: 'Meta正式开源Llama 4，该模型在多项基准测试中超越GPT-4，且支持完全免费商业使用，预计将重塑AI开源生态。',
-                source: 'Meta AI',
-                url: 'https://ai.meta.com/blog/llama-4',
-                date: '2026-02-22'
+                source: '知乎',
+                url: 'https://www.zhihu.com/topic/人工智能/hot'
             },
             {
                 rank: 4,
                 title: '英伟达发布H200 GPU：AI训练速度提升2倍',
                 summary: '英伟达发布新一代AI芯片H200，采用新一代Hopper架构，显存容量提升至141GB，AI训练速度相比H100提升2倍。',
-                source: 'NVIDIA',
-                url: 'https://www.nvidia.com/en-us/',
-                date: '2026-02-22'
+                source: '腾讯新闻',
+                url: 'https://new.qq.com/omn/AI.html'
             },
             {
                 rank: 5,
                 title: 'Anthropic发布Claude 4：安全性和能力双提升',
                 summary: 'Anthropic发布Claude 4系列，包含Opus和Sonnet两个版本。新版本在数学推理、代码生成等任务上的表现显著提升。',
-                source: 'Anthropic',
-                url: 'https://www.anthropic.com/claude',
-                date: '2026-02-22'
+                source: '量子位',
+                url: 'https://www.qbitai.com/'
             },
             {
                 rank: 6,
                 title: '百度文心大模型4.0发布：中文理解能力全球领先',
                 summary: '百度发布文心大模型4.0，在中文理解、文学创作、知识问答等方面达到全球领先水平，同时推理效率提升50%。',
                 source: '百度',
-                url: 'https://ai.baidu.com/',
-                date: '2026-02-22'
+                url: 'https://ai.baidu.com/'
             },
             {
                 rank: 7,
                 title: 'Stability AI发布Stable Video 3.0：视频生成质量质的飞跃',
                 summary: 'Stability AI发布Stable Video 3.0，能够生成1080p高清视频，单次生成最长可达60秒，视频质量接近实拍。',
-                source: 'Stability AI',
-                url: 'https://stability.ai/blog',
-                date: '2026-02-22'
+                source: '36氪',
+                url: 'https://www.36kr.com/information/AI/'
             },
             {
                 rank: 8,
                 title: '特斯拉Optimus Gen 3亮相：灵活度大幅提升',
                 summary: '特斯拉展示最新一代Optimus Gen 3人形机器人，手部灵活性大幅提升，能够完成精细操作，距离商业化更近一步。',
-                source: 'Tesla',
-                url: 'https://www.tesla.com/ai',
-                date: '2026-02-22'
+                source: '新浪科技',
+                url: 'https://tech.sina.com.cn/ai/'
             },
             {
                 rank: 9,
                 title: '微软Copilot全面升级：支持全平台AI助手',
                 summary: '微软宣布Copilot全面升级，整合Windows、Office、Edge等平台，提供跨应用的AI助手服务，月活用户突破3亿。',
-                source: 'Microsoft',
-                url: 'https://www.microsoft.com/en-us/ai',
-                date: '2026-02-22'
+                source: '网易科技',
+                url: 'https://tech.163.com/'
             },
             {
                 rank: 10,
                 title: '阿里云发布通义千问3.0：企业级AI能力再升级',
                 summary: '阿里云发布通义千问3.0，在企业场景下的任务完成率提升40%，同时推出面向金融、医疗等行业的垂直解决方案。',
-                source: '阿里巴巴',
-                url: 'https://tongyi.aliyun.com/',
-                date: '2026-02-22'
+                source: '阿里云',
+                url: 'https://tongyi.aliyun.com/'
             }
         ];
 
