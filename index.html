@@ -499,12 +499,32 @@
             { time: '06:30', title: 'Anthropic发布Claude 4 Opus' }
         ];
 
+        const sourceUrls = {
+            'OpenAI': 'https://openai.com/blog',
+            'DeepMind': 'https://deepmind.google/research/publications',
+            'Meta AI': 'https://ai.meta.com/blog',
+            'NVIDIA': 'https://www.nvidia.com/en-us/',
+            'Anthropic': 'https://www.anthropic.com',
+            '百度': 'https://ai.baidu.com/',
+            'Stability AI': 'https://stability.ai/blog',
+            'Tesla': 'https://www.tesla.com/ai',
+            'Microsoft': 'https://www.microsoft.com/en-us/ai',
+            '阿里巴巴': 'https://tongyi.aliyun.com/',
+            '腾讯': 'https://ai.tencent.com/',
+            '字节跳动': 'https://www.bytedance.com/zh/',
+            '知乎': 'https://www.zhihu.com/topic/人工智能/hot',
+            '机器之心': 'https://www.jiqizhixin.com/',
+            '36氪': 'https://www.36kr.com/information/AI/',
+            '量子位': 'https://www.qbitai.com/'
+        };
+
         const mockHotNews = [
             {
                 rank: 1,
                 title: 'OpenAI GPT-5正式发布：多模态能力大幅提升',
                 summary: 'OpenAI正式发布GPT-5，新版本在推理能力、多模态理解和生成方面取得重大突破。据官方介绍，GPT-5的参数规模达到10万亿，训练数据量超过100万亿token。',
                 source: 'OpenAI',
+                url: 'https://openai.com/blog/gpt-5',
                 date: '2026-02-22'
             },
             {
@@ -512,6 +532,7 @@
                 title: 'Google DeepMind发布AlphaFold 4：蛋白质结构预测准确率接近100%',
                 summary: 'Google DeepMind宣布推出AlphaFold 4，该版本能够准确预测蛋白质与其他分子的相互作用，为药物研发提供更强大的工具。',
                 source: 'DeepMind',
+                url: 'https://deepmind.google/research/publications',
                 date: '2026-02-22'
             },
             {
@@ -519,6 +540,7 @@
                 title: 'Meta开源Llama 4：性能超越GPT-4，完全免费商用',
                 summary: 'Meta正式开源Llama 4，该模型在多项基准测试中超越GPT-4，且支持完全免费商业使用，预计将重塑AI开源生态。',
                 source: 'Meta AI',
+                url: 'https://ai.meta.com/blog/llama-4',
                 date: '2026-02-22'
             },
             {
@@ -526,6 +548,7 @@
                 title: '英伟达发布H200 GPU：AI训练速度提升2倍',
                 summary: '英伟达发布新一代AI芯片H200，采用新一代Hopper架构，显存容量提升至141GB，AI训练速度相比H100提升2倍。',
                 source: 'NVIDIA',
+                url: 'https://www.nvidia.com/en-us/',
                 date: '2026-02-22'
             },
             {
@@ -533,6 +556,7 @@
                 title: 'Anthropic发布Claude 4：安全性和能力双提升',
                 summary: 'Anthropic发布Claude 4系列，包含Opus和Sonnet两个版本。新版本在数学推理、代码生成等任务上的表现显著提升。',
                 source: 'Anthropic',
+                url: 'https://www.anthropic.com/claude',
                 date: '2026-02-22'
             },
             {
@@ -540,6 +564,7 @@
                 title: '百度文心大模型4.0发布：中文理解能力全球领先',
                 summary: '百度发布文心大模型4.0，在中文理解、文学创作、知识问答等方面达到全球领先水平，同时推理效率提升50%。',
                 source: '百度',
+                url: 'https://ai.baidu.com/',
                 date: '2026-02-22'
             },
             {
@@ -547,6 +572,7 @@
                 title: 'Stability AI发布Stable Video 3.0：视频生成质量质的飞跃',
                 summary: 'Stability AI发布Stable Video 3.0，能够生成1080p高清视频，单次生成最长可达60秒，视频质量接近实拍。',
                 source: 'Stability AI',
+                url: 'https://stability.ai/blog',
                 date: '2026-02-22'
             },
             {
@@ -554,6 +580,7 @@
                 title: '特斯拉Optimus Gen 3亮相：灵活度大幅提升',
                 summary: '特斯拉展示最新一代Optimus Gen 3人形机器人，手部灵活性大幅提升，能够完成精细操作，距离商业化更近一步。',
                 source: 'Tesla',
+                url: 'https://www.tesla.com/ai',
                 date: '2026-02-22'
             },
             {
@@ -561,6 +588,7 @@
                 title: '微软Copilot全面升级：支持全平台AI助手',
                 summary: '微软宣布Copilot全面升级，整合Windows、Office、Edge等平台，提供跨应用的AI助手服务，月活用户突破3亿。',
                 source: 'Microsoft',
+                url: 'https://www.microsoft.com/en-us/ai',
                 date: '2026-02-22'
             },
             {
@@ -568,6 +596,7 @@
                 title: '阿里云发布通义千问3.0：企业级AI能力再升级',
                 summary: '阿里云发布通义千问3.0，在企业场景下的任务完成率提升40%，同时推出面向金融、医疗等行业的垂直解决方案。',
                 source: '阿里巴巴',
+                url: 'https://tongyi.aliyun.com/',
                 date: '2026-02-22'
             }
         ];
@@ -598,13 +627,15 @@
 
         function renderNews(news) {
             const grid = document.getElementById('newsGrid');
-            grid.innerHTML = news.map(item => `
+            grid.innerHTML = news.map(item => {
+                const url = item.url || sourceUrls[item.source] || '#';
+                return `
                 <div class="news-card">
                     <div class="news-rank">${item.rank}</div>
                     <h3 class="news-title">${item.title}</h3>
                     <p class="news-summary">${item.summary}</p>
                     <div class="news-meta">
-                        <span class="news-source">${item.source}</span>
+                        <a href="${url}" target="_blank" class="news-source">${item.source}</a>
                         <button class="export-btn" onclick="exportSingle(${item.rank})">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -615,7 +646,7 @@
                         </button>
                     </div>
                 </div>
-            `).join('');
+            `}).join('');
         }
 
         function exportSingle(rank) {
@@ -725,9 +756,9 @@
             const dateStr = yesterday.toISOString().split('T')[0];
             
             const prompt = `请搜索并分析${dateStr}当天的10大AI热点新闻，返回JSON格式：[
-                {"rank":1,"title":"新闻标题","summary":"50字摘要","source":"来源"},
+                {"rank":1,"title":"新闻标题","summary":"50字摘要","source":"来源","url":"新闻原文链接（国内可访问的中文链接）"},
                 ...共10条
-            ]`;
+            ]。注意：url必须是中国大陆可以访问的链接，如百度、知乎、36氪、机器之心、腾讯新闻、微信公众号等平台的链接，不要使用twitter、youtube等国内无法访问的链接。`;
 
             try {
                 const result = await callModelScopeAPI(prompt);
