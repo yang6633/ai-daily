@@ -863,11 +863,11 @@
 
         initTicker();
         
-        // 先显示mock数据，让用户立刻看到内容
+        // 直接显示新闻，不需要等待API
         renderNews(mockHotNews);
-        
-        // 后台调用API更新新闻
-        fetchAInews();
+
+        // 手动更新新闻按钮功能（可选）
+        // fetchAInews(); // 如需更新新闻数据，手动调用
 
         const exportAllBtn = document.createElement('button');
         exportAllBtn.className = 'export-all-btn';
