@@ -108,6 +108,11 @@
             letter-spacing: 1px;
         }
 
+        button:hover {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(255, 0, 170, 0.3)) !important;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+        }
+
         .ticker-wrap {
             background: linear-gradient(90deg, rgba(0, 240, 255, 0.1), rgba(255, 0, 170, 0.1));
             border-bottom: 1px solid var(--border-color);
@@ -466,7 +471,10 @@
     <header>
         <div class="header-content">
             <div class="logo">AI DAILY</div>
-            <div class="date-display" id="currentDate"></div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button onclick="exportAll()" style="background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(255, 0, 170, 0.2)); border: 1px solid rgba(0, 240, 255, 0.3); color: #00f0ff; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;">导出新闻海报</button>
+                <div class="date-display" id="currentDate"></div>
+            </div>
         </div>
     </header>
 
