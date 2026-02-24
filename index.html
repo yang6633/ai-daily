@@ -735,7 +735,7 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        async function callModelScopeAPI(prompt, timeout = 8000) {
+        async function callModelScopeAPI(prompt, timeout = 15000) {
             try {
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -777,8 +777,24 @@
             try {
                 const result = await callModelScopeAPI(prompt);
                 if (result) {
-                    const news = JSON.parse(result);
-                    renderNews(news);
+                    // 尝试从返回内容中提取JSON
+                    let news = null;
+                    try {
+                        news = JSON.parse(result);
+                    } catch {
+                        // 尝试找到JSON数组
+                        const match = result.match(/\[[\s\S]*\]/);
+                        if (match) {
+                            try {
+                                news = JSON.parse(match[0]);
+                            } catch {}
+                        }
+                    }
+                    if (news && Array.isArray(news) && news.length > 0) {
+                        renderNews(news);
+                    } else {
+                        renderNews(mockHotNews);
+                    }
                 } else {
                     renderNews(mockHotNews);
                 }
