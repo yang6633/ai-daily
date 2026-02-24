@@ -16,6 +16,8 @@ jobs:
           fetch-depth: 0
 
       - name: Fetch AI news
+        env:
+          API_KEY: ${{ secrets.SILICONFLOW_API_KEY }}
         run: |
           pip install requests
           python update_news.py

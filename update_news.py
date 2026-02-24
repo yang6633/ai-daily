@@ -7,7 +7,7 @@ import os
 import re
 import json
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 API_CONFIG = {
     'base_url': 'https://api.siliconflow.cn/v1',
@@ -30,9 +30,12 @@ SOURCES = [
 
 def fetch_ai_news():
     """调用API获取AI新闻"""
-    today = datetime.now().strftime('%Y-%m-%d')
+    today = datetime.now()
+    yesterday = today - timedelta(days=1)
+    yesterday_str = yesterday.strftime('%Y-%m-%d')
+    yesterday_display = yesterday.strftime('%m月%d日')
     
-    prompt = f"""搜索{today}今天的AI热点新闻，从以下来源筛选对普通人有价值的10条：
+    prompt = f"""搜索{yesterday_str}（昨天{yesterday_display}）的AI热点新闻，从以下来源筛选对普通人有价值的10条：
 {', '.join(SOURCES)}
 
 筛选标准（对普通人有价值）：

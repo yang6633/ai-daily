@@ -789,11 +789,15 @@
             }
         }
 
-        async function fetchAInews() {
+async function fetchAInews() {
             const today = new Date();
-            const dateStr = today.toISOString().split('T')[0];
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
             
-            const prompt = `搜索${dateStr}今天的AI热点新闻，从以下来源筛选对普通人有价值的10条：
+            const dateStr = yesterday.toISOString().split('T')[0];
+            const displayDate = `${yesterday.getMonth()+1}月${yesterday.getDate()}日`;
+            
+            const prompt = `搜索${dateStr}（昨天${displayDate}）的AI热点新闻，从以下来源筛选对普通人有价值的10条：
 - 36氪 (36kr.com)
 - 机器之心 (jiqizhixin.com)  
 - 新浪科技/新浪AI (k.sina.com.cn)
