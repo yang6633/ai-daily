@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Daily - 每日AI热点</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary: #00f0ff;
+            --primary-dim: #00a8b3;
+            --secondary: #ff00aa;
+            --accent: #7b2dff;
+            --bg-dark: #0a0a0f;
+            --bg-card: #12121a;
+            --bg-card-hover: #1a1a25;
+            --text: #e0e0e0;
+            --text-dim: #8888aa;
+            --glow-primary: 0 0 20px rgba(0, 240, 255, 0.3);
+            --glow-secondary: 0 0 20px rgba(255, 0, 170, 0.3);
+            --border-color: rgba(0, 240, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(0, 240, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 0, 170, 0.05) 0%, transparent 50%),
+                linear-gradient(180deg, #0a0a0f 0%, #0f0f18 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: var(--glow-primary);
+            letter-spacing: 2px;
+        }
+
+        .date-display {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .ticker-wrap {
+            background: linear-gradient(90deg, rgba(0, 240, 255, 0.1), rgba(255, 0, 170, 0.1));
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.8rem 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ticker {
+            display: flex;
+            animation: ticker 30s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 0 2rem;
+            color: var(--text);
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .ticker-item::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 1rem;
+            box-shadow: var(--glow-primary);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .ticker-item .time {
+            color: var(--primary);
+            margin-right: 0.8rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+        }
+
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .news-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .news-card:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-4px);
+            box-shadow: var(--glow-primary);
+            border-color: var(--primary-dim);
+        }
+
+        .news-card:hover::before {
+            opacity: 1;
+        }
+
+        .news-rank {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: rgba(0, 240, 255, 0.1);
+            line-height: 1;
+        }
+
+        .news-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+            color: var(--text);
+            line-height: 1.5;
+            padding-right: 3rem;
+        }
+
+        .news-summary {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .news-source {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border: none;
+            color: var(--bg-dark);
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .export-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--glow-primary);
+        }
+
+        .export-all-btn {
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin: 2rem auto;
+        }
+
+        .export-all-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--glow-secondary);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: var(--text-dim);
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--primary);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: var(--text);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-color: #00ff88;
+        }
+
+        .export-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-dark);
+            z-index: 200;
+            overflow: auto;
+            padding: 2rem;
+        }
+
+        .export-container.active {
+            display: block;
+        }
+
+        .export-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .export-close {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .export-close:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .export-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .export-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .export-news-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 3rem;
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            main {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-overlay"></div>
+    
+    <header>
+        <div class="header-content">
+            <div class="logo">AI DAILY</div>
+            <div class="date-display" id="currentDate"></div>
+        </div>
+    </header>
+
+    <div class="ticker-wrap">
+        <div class="ticker" id="ticker">
+        </div>
+    </div>
+
+    <main>
+        <h2 class="section-title">昨日AI十大热点</h2>
+        <div class="news-grid" id="newsGrid">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>正在获取AI热点新闻...</p>
+            </div>
+        </div>
+    </main>
+
+    <div class="export-container" id="exportContainer">
+        <div class="export-header">
+            <h2 class="section-title" style="margin: 0;">导出长图</h2>
+            <div class="export-actions">
+                <button class="export-btn" onclick="downloadImage()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    下载图片
+                </button>
+                <button class="export-close" onclick="closeExport()">关闭</button>
+            </div>
+        </div>
+        <div class="export-content" id="exportContent">
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <footer class="footer">
+        <p>Powered by ModelScope AI | © 2026 AI Daily</p>
+    </footer>
+
+    <script>
+        const API_CONFIG = {
+            base_url: 'https://api-inference.modelscope.cn/v1',
+            api_key: 'ms-a763fdd7-5ee5-43d2-9ed5-8c9d37d57ca6',
+            model: 'moonshotai/Kimi-K2.5'
+        };
+
+        const mockTickerNews = [
+            { time: '10:30', title: 'OpenAI发布GPT-5新预览版本' },
+            { time: '09:45', title: 'Google DeepMind推出新一代AlphaFold 4' },
+            { time: '08:20', title: 'Meta开源Llama 4性能超越GPT-4' },
+            { time: '07:55', title: '英伟达发布最新AI芯片H200' },
+            { time: '06:30', title: 'Anthropic发布Claude 4 Opus' }
+        ];
+
+        const mockHotNews = [
+            {
+                rank: 1,
+                title: 'OpenAI GPT-5正式发布：多模态能力大幅提升',
+                summary: 'OpenAI正式发布GPT-5，新版本在推理能力、多模态理解和生成方面取得重大突破。据官方介绍，GPT-5的参数规模达到10万亿，训练数据量超过100万亿token。',
+                source: 'OpenAI',
+                date: '2026-02-22'
+            },
+            {
+                rank: 2,
+                title: 'Google DeepMind发布AlphaFold 4：蛋白质结构预测准确率接近100%',
+                summary: 'Google DeepMind宣布推出AlphaFold 4，该版本能够准确预测蛋白质与其他分子的相互作用，为药物研发提供更强大的工具。',
+                source: 'DeepMind',
+                date: '2026-02-22'
+            },
+            {
+                rank: 3,
+                title: 'Meta开源Llama 4：性能超越GPT-4，完全免费商用',
+                summary: 'Meta正式开源Llama 4，该模型在多项基准测试中超越GPT-4，且支持完全免费商业使用，预计将重塑AI开源生态。',
+                source: 'Meta AI',
+                date: '2026-02-22'
+            },
+            {
+                rank: 4,
+                title: '英伟达发布H200 GPU：AI训练速度提升2倍',
+                summary: '英伟达发布新一代AI芯片H200，采用新一代Hopper架构，显存容量提升至141GB，AI训练速度相比H100提升2倍。',
+                source: 'NVIDIA',
+                date: '2026-02-22'
+            },
+            {
+                rank: 5,
+                title: 'Anthropic发布Claude 4：安全性和能力双提升',
+                summary: 'Anthropic发布Claude 4系列，包含Opus和Sonnet两个版本。新版本在数学推理、代码生成等任务上的表现显著提升。',
+                source: 'Anthropic',
+                date: '2026-02-22'
+            },
+            {
+                rank: 6,
+                title: '百度文心大模型4.0发布：中文理解能力全球领先',
+                summary: '百度发布文心大模型4.0，在中文理解、文学创作、知识问答等方面达到全球领先水平，同时推理效率提升50%。',
+                source: '百度',
+                date: '2026-02-22'
+            },
+            {
+                rank: 7,
+                title: 'Stability AI发布Stable Video 3.0：视频生成质量质的飞跃',
+                summary: 'Stability AI发布Stable Video 3.0，能够生成1080p高清视频，单次生成最长可达60秒，视频质量接近实拍。',
+                source: 'Stability AI',
+                date: '2026-02-22'
+            },
+            {
+                rank: 8,
+                title: '特斯拉Optimus Gen 3亮相：灵活度大幅提升',
+                summary: '特斯拉展示最新一代Optimus Gen 3人形机器人，手部灵活性大幅提升，能够完成精细操作，距离商业化更近一步。',
+                source: 'Tesla',
+                date: '2026-02-22'
+            },
+            {
+                rank: 9,
+                title: '微软Copilot全面升级：支持全平台AI助手',
+                summary: '微软宣布Copilot全面升级，整合Windows、Office、Edge等平台，提供跨应用的AI助手服务，月活用户突破3亿。',
+                source: 'Microsoft',
+                date: '2026-02-22'
+            },
+            {
+                rank: 10,
+                title: '阿里云发布通义千问3.0：企业级AI能力再升级',
+                summary: '阿里云发布通义千问3.0，在企业场景下的任务完成率提升40%，同时推出面向金融、医疗等行业的垂直解决方案。',
+                source: '阿里巴巴',
+                date: '2026-02-22'
+            }
+        ];
+
+        function formatDate(date) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            return date.toLocaleDateString('zh-CN', options);
+        }
+
+        function getYesterday() {
+            const date = new Date();
+            date.setDate(date.getDate() - 1);
+            return date.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
+        }
+
+        document.getElementById('currentDate').textContent = formatDate(new Date());
+
+        function initTicker() {
+            const ticker = document.getElementById('ticker');
+            const items = [...mockTickerNews, ...mockTickerNews];
+            ticker.innerHTML = items.map(item => `
+                <div class="ticker-item">
+                    <span class="time">${item.time}</span>
+                    <span>${item.title}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderNews(news) {
+            const grid = document.getElementById('newsGrid');
+            grid.innerHTML = news.map(item => `
+                <div class="news-card">
+                    <div class="news-rank">${item.rank}</div>
+                    <h3 class="news-title">${item.title}</h3>
+                    <p class="news-summary">${item.summary}</p>
+                    <div class="news-meta">
+                        <span class="news-source">${item.source}</span>
+                        <button class="export-btn" onclick="exportSingle(${item.rank})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                            导出
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function exportSingle(rank) {
+            const news = mockHotNews.find(n => n.rank === rank);
+            const container = document.getElementById('exportContainer');
+            const content = document.getElementById('exportContent');
+            
+            content.innerHTML = `
+                <div style="background: linear-gradient(135deg, #0a0a0f 0%, #12121a 100%); padding: 2rem; border-radius: 16px; border: 1px solid rgba(0, 240, 255, 0.2);">
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: #00f0ff; margin-bottom: 1rem; letter-spacing: 2px;">AI DAILY</div>
+                    <div style="color: #8888aa; margin-bottom: 1.5rem;">${getYesterday()} AI热点新闻</div>
+                    <div class="export-news-card" style="margin: 0; background: rgba(18, 18, 26, 0.8);">
+                        <div style="font-family: 'Orbitron', sans-serif; font-size: 2rem; color: rgba(0, 240, 255, 0.15); position: absolute; right: 1rem; top: 1rem;">${news.rank}</div>
+                        <h3 style="font-size: 1.1rem; font-weight: 500; margin-bottom: 0.8rem; padding-right: 3rem;">${news.title}</h3>
+                        <p style="font-size: 0.9rem; color: #8888aa; line-height: 1.6;">${news.summary}</p>
+                        <div style="margin-top: 1rem; font-size: 0.8rem; color: #00f0ff;">${news.source}</div>
+                    </div>
+                    <div style="margin-top: 1.5rem; text-align: center; color: #8888aa; font-size: 0.8rem;">Generated by AI Daily</div>
+                </div>
+            `;
+            
+            container.classList.add('active');
+        }
+
+        function exportAll() {
+            const container = document.getElementById('exportContainer');
+            const content = document.getElementById('exportContent');
+            
+            content.innerHTML = `
+                <div style="background: linear-gradient(135deg, #0a0a0f 0%, #12121a 100%); padding: 2rem; border-radius: 16px; border: 1px solid rgba(0, 240, 255, 0.2);">
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 1.5rem; color: #00f0ff; margin-bottom: 0.5rem; letter-spacing: 3px; text-align: center;">AI DAILY</div>
+                    <div style="color: #8888aa; margin-bottom: 2rem; text-align: center;">${getYesterday()} AI十大热点新闻</div>
+                    ${mockHotNews.map(news => `
+                        <div class="export-news-card" style="margin: 0 0 1rem 0; background: rgba(18, 18, 26, 0.8);">
+                            <div style="font-family: 'Orbitron', sans-serif; font-size: 2rem; color: rgba(0, 240, 255, 0.15); position: absolute; right: 1rem; top: 1rem;">${news.rank}</div>
+                            <h3 style="font-size: 1rem; font-weight: 500; margin-bottom: 0.5rem; padding-right: 3rem;">${news.title}</h3>
+                            <p style="font-size: 0.85rem; color: #8888aa; line-height: 1.5;">${news.summary.substring(0, 100)}...</p>
+                            <div style="margin-top: 0.5rem; font-size: 0.75rem; color: #00f0ff;">${news.source}</div>
+                        </div>
+                    `).join('')}
+                    <div style="margin-top: 1.5rem; text-align: center; color: #8888aa; font-size: 0.8rem;">Generated by AI Daily • ${new Date().toLocaleDateString('zh-CN')}</div>
+                </div>
+            `;
+            
+            container.classList.add('active');
+        }
+
+        function closeExport() {
+            document.getElementById('exportContainer').classList.remove('active');
+        }
+
+        async function downloadImage() {
+            const content = document.getElementById('exportContent');
+            try {
+                const canvas = await html2canvas(content, {
+                    backgroundColor: '#0a0a0f',
+                    scale: 2
+                });
+                const link = document.createElement('a');
+                link.download = `ai-daily-${new Date().toISOString().split('T')[0]}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast('图片下载成功！', 'success');
+            } catch (e) {
+                showToast('导出失败，请重试');
+            }
+        }
+
+        function showToast(message, type = '') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        async function callModelScopeAPI(prompt) {
+            try {
+                const response = await fetch(API_CONFIG.base_url + '/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_CONFIG.api_key}`
+                    },
+                    body: JSON.stringify({
+                        model: API_CONFIG.model,
+                        messages: [{ role: 'user', content: prompt }],
+                        temperature: 0.7
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API request failed: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.choices[0].message.content;
+            } catch (error) {
+                console.error('API Error:', error);
+                return null;
+            }
+        }
+
+        async function fetchAInews() {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const dateStr = yesterday.toISOString().split('T')[0];
+            
+            const prompt = `请搜索并分析${dateStr}当天的10大AI热点新闻，返回JSON格式：[
+                {"rank":1,"title":"新闻标题","summary":"50字摘要","source":"来源"},
+                ...共10条
+            ]`;
+
+            try {
+                const result = await callModelScopeAPI(prompt);
+                if (result) {
+                    const news = JSON.parse(result);
+                    renderNews(news);
+                } else {
+                    renderNews(mockHotNews);
+                }
+            } catch (e) {
+                console.log('Using mock data');
+                renderNews(mockHotNews);
+            }
+        }
+
+        initTicker();
+        
+        setTimeout(() => {
+            fetchAInews();
+        }, 500);
+
+        const exportAllBtn = document.createElement('button');
+        exportAllBtn.className = 'export-all-btn';
+        exportAllBtn.innerHTML = `
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            导出全部新闻为长图
+        `;
+        exportAllBtn.onclick = exportAll;
+        document.querySelector('main').appendChild(exportAllBtn);
+    </script>
+</body>
+</html>
