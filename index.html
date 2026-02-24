@@ -501,7 +501,7 @@
     <div class="toast" id="toast"></div>
 
     <footer class="footer">
-        <p>AI Daily · 每日AI热点 | 数据来源：36氪、机器之心、新浪科技 | Powered by SiliconFlow</p>
+        <p>AI Daily · 每日AI热点 | 数据来源：36氪、机器之心、虎嗅、钛媒体、新浪、腾讯、网易等</p>
         <p style="margin-top: 0.5rem; opacity: 0.6; font-size: 0.75rem;">每日更新 · 聚焦对普通人有价值的AI新闻</p>
     </footer>
 
@@ -523,7 +523,9 @@
         const sourceUrls = {
             '经济参考报': 'http://jjckb.xinhuanet.com/',
             '新浪科技': 'https://k.sina.com.cn/',
+            '新浪AI': 'https://k.sina.com.cn/',
             '每日经济新闻': 'https://www.nbd.com.cn/',
+            '网易科技': 'https://tech.163.com/',
             '网易智能': 'https://tech.163.com/',
             '新华网': 'https://www.news.cn/',
             '机器之心': 'https://www.jiqizhixin.com/',
@@ -533,10 +535,14 @@
             '量子位': 'https://www.qbitai.com/',
             '知乎': 'https://www.zhihu.com/topic/人工智能/hot',
             '腾讯新闻': 'https://new.qq.com/omn/AI.html',
+            '腾讯科技': 'https://new.qq.com/',
             '阿里云': 'https://tongyi.aliyun.com/',
+            '虎嗅': 'https://www.huxiu.com/',
+            '钛媒体': 'https://www.tmtpost.com/',
+            '品玩': 'https://www.pinw.com/',
             'OpenAI': 'https://www.jiqizhixin.com/',
             'DeepMind': 'https://www.36kr.com/information/AI/',
-            'Meta AI': 'https://www.zhihu.com/topic/人工智能/hot',
+            'Meta AI': 'https://k.sina.com.cn/',
             'NVIDIA': 'https://www.nbd.com.cn/',
             'Anthropic': 'https://www.qbitai.com/',
             'Stability AI': 'https://www.36kr.com/information/AI/',
@@ -546,8 +552,14 @@
             '腾讯': 'https://new.qq.com/omn/AI.html',
             '字节跳动': 'https://www.bytedance.com/zh/',
             '新浪': 'https://k.sina.com.cn/',
-            '网易科技': 'https://tech.163.com/',
-            '阿里云': 'https://tongyi.aliyun.com/'
+            '网易': 'https://tech.163.com/',
+            '苹果日报': 'https://www.appledaily.com/',
+            'OpenAI': 'https://www.jiqizhixin.com/',
+            'Google': 'https://www.36kr.com/information/AI/',
+            'Meta': 'https://k.sina.com.cn/',
+            '英伟达': 'https://tech.163.com/',
+            '微软': 'https://tech.163.com/',
+            '谷歌': 'https://www.36kr.com/information/AI/'
         };
 
         const mockHotNews = [
@@ -576,8 +588,8 @@
                 rank: 4,
                 title: '红杉资本重磅宣言：2026，AGI通用人工智能要来了！',
                 summary: '红杉资本发布宣言称2026年将是AGI元年，AI智能体将迎来爆发式增长。',
-                source: '新浪科技',
-                url: 'https://k.sina.com.cn/article_7857201856_1d45362c001902fqlo.html?from=tech'
+                source: '虎嗅',
+                url: 'https://www.huxiu.com/'
             },
             {
                 rank: 5,
@@ -589,22 +601,22 @@
             {
                 rank: 6,
                 title: '手机AI助手大战！国产AI应用用户量暴涨',
-                summary: '春节国产AI应用爆发：豆包、元宝竞争激烈，AI手机成新战场，普通人如何选？',
-                source: '界面新闻',
-                url: 'https://m.jiemian.com/article/14028970.html'
+                summary: '春节国产AI应用爆发：豆包，元宝竞争激烈，AI手机成新战场，普通人如何选？',
+                source: '钛媒体',
+                url: 'https://www.tmtpost.com/'
             },
             {
                 rank: 7,
                 title: '英伟达发布新一代GPU！AI训练速度更快了',
                 summary: '英伟达发布新AI算力平台，包含6款GPU芯片，AI训练和推理速度大幅提升。',
-                source: '新浪科技',
-                url: 'https://k.sina.com.cn/article_7857201856_1d45362c001902kc42.html?from=tech'
+                source: '品玩',
+                url: 'https://www.pinw.com/'
             },
             {
                 rank: 8,
                 title: 'AI智能体Agent爆发！打字就能让AI帮你做事',
                 summary: '2026年AI Agent迎来爆发期，用户用自然语言就能让AI自主规划执行任务。',
-                source: '腾讯新闻',
+                source: '腾讯科技',
                 url: 'https://new.qq.com/omn/AI.html'
             },
             {
@@ -618,9 +630,17 @@
                 rank: 10,
                 title: 'Meta官宣100亿美元建AI数据中心！全球最大',
                 summary: 'Meta宣布投资100亿美元在美国建设超大型AI数据中心，可容纳数十万GPU。',
-                source: '机器之心',
-                url: 'https://www.jiqizhixin.com/'
+                source: '量子位',
+                url: 'https://www.qbitai.com/'
             }
+        ];
+
+        const mockTickerNews = [
+            { time: '10:30', title: '豆包AI春节互动超19亿次，DAU破5000万' },
+            { time: '09:45', title: 'OpenAI ChatGPT接入美国国防部' },
+            { time: '08:20', title: '科技巨头2026年AI投资超6500亿美元' },
+            { time: '07:55', title: '红杉资本：2026，AGI要来了' },
+            { time: '06:30', title: '国资委部署央企AI+专项行动' }
         ];
 
         const mockTickerNews = [
@@ -789,14 +809,26 @@
             const today = new Date();
             const dateStr = today.toISOString().split('T')[0];
             
-            const prompt = `搜索${dateStr}今天的AI热点新闻，筛选对普通人有价值的10条新闻。要求：
-1. 普通人能看懂的AI产品应用（如豆包、Kimi等AI工具）
-2. 有重大突破的技术进展
-3. 大公司的AI新动作
-4. 与日常生活相关的AI应用
-5. 中国AI发展的重要动态
+            const prompt = `搜索${dateStr}今天的AI热点新闻，从以下来源筛选对普通人有价值的10条：
+- 36氪 (36kr.com)
+- 机器之心 (jiqizhixin.com)  
+- 新浪科技/新浪AI (k.sina.com.cn)
+- 腾讯科技 (new.qq.com)
+- 网易科技 (tech.163.com)
+- 每日经济新闻 (nbd.com.cn)
+- 界面新闻 (jiemian.com)
+- 虎嗅 (huxiu.com)
+- 钛媒体 (tmtpost.com)
+- 品玩 (pinw.com)
 
-返回JSON数组格式：[{rank:1,title:"标题",summary:"50字摘要",source:"来源",url:"36kr或机器之心或新浪的具体文章URL"}]
+筛选标准（对普通人有价值）：
+1. AI产品应用（如豆包、Kimi等工具）
+2. 有重大突破的技术进展
+3. 大公司新动作
+4. 与日常生活相关的AI
+5. 中国AI重要动态
+
+返回JSON数组格式：[{rank:1,title:"标题",summary:"50字摘要",source:"来源",url:"具体文章URL"}]
 直接返回JSON数组，不要其他文字。
 
             try {
