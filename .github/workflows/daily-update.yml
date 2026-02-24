@@ -12,29 +12,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          persist-credentials: false
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install requests
+          ref: main
+          fetch-depth: 0
 
       - name: Fetch AI news
-        env:
-          API_KEY: sk-sxywzqwtlsqqmahggohedzfbrmmncjexmrqhuqdfxuvxypgq
-        run: python update_news.py
+        run: |
+          pip install requests
+          python update_news.py
 
       - name: Commit and push
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git config --local credential.helper store
-          echo "https://x-access-token:$GITHUB_TOKEN@github.com" > ~/.git-credentials
           git add index.html
-          git diff --staged --quiet || git commit -m "daily: update AI news $(date +%Y-%m-%d)"
-          git push
+          git status
+          if [ -n "$(git diff --staged --name-only)" ]; then
+            git commit -m "daily: update AI news $(date +%Y-%m-%d)"
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/yang6633/ai-daily.git
+          else
+            echo "No changes to commit"
+          fi
