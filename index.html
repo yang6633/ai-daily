@@ -772,10 +772,7 @@
             const today = new Date();
             const dateStr = today.toISOString().split('T')[0];
             
-            const prompt = `请搜索并分析${dateStr}今天的10大AI热点新闻，返回JSON格式：[
-                {"rank":1,"title":"新闻标题","summary":"50字摘要","source":"来源","url":"新闻原文链接（国内可访问的中文链接）"},
-                ...共10条
-            ]。注意：url必须是中国大陆可以访问的链接，如百度、知乎、36氪、机器之心、腾讯新闻、微信公众号等平台的链接，不要使用twitter、youtube等国内无法访问的链接。`;
+            const prompt = `搜索${dateStr}今天的10条AI热点新闻，返回纯JSON数组格式，每条包含：rank(数字),title(标题),summary(50字摘要),source(来源),url(36kr或机器之心或知乎的具体文章URL，不要首页)。直接返回JSON，不要其他文字。比如：[{"rank":1,"title":"标题","summary":"摘要","source":"36氪","url":"https://36kr.com/..."}]`;
 
             try {
                 const result = await callModelScopeAPI(prompt);
