@@ -901,24 +901,21 @@
                     useCORS: true
                 });
                 
-                canvas.toBlob(function(blob) {
-                    if (blob) {
-                        const url = URL.createObjectURL(blob);
-                        const img = new Image();
-                        img.onload = function() {
-                            const newWindow = window.open('', '_blank');
-                            if (newWindow) {
-                                newWindow.document.write('<img src="' + img.src + '" style="max-width:100%;">');
-                                newWindow.document.write('<p style="text-align:center;color:#888;margin-top:20px;">长按图片保存到手机</p>');
-                            }
-                            URL.revokeObjectURL(url);
-                        };
-                        img.src = url;
-                        showToast('图片已生成，长按保存');
-                    } else {
-                        showToast('导出失败，请重试');
-                    }
-                }, 'image/png');
+                const dataUrl = canvas.toDataURL('image/png');
+                
+                // 直接显示图片，让用户长按保存
+                const exportContainer = document.getElementById('exportContainer');
+                const exportContent = document.getElementById('exportContent');
+                
+                exportContent.innerHTML = `
+                    <div style="text-align:center; padding: 2rem;">
+                        <img src="${dataUrl}" style="max-width:100%; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+                        <p style="margin-top:1.5rem; color:#00f0ff; font-size:1rem;">👆 长按图片保存到手机</p>
+                        <button onclick="closeExport()" style="margin-top:1rem; padding:0.6rem 1.5rem; background:rgba(0,240,255,0.2); border:1px solid rgba(0,240,255,0.4); color:#00f0ff; border-radius:8px; cursor:pointer;">关闭</button>
+                    </div>
+                `;
+                
+                showToast('图片已生成');
             } catch (e) {
                 showToast('导出失败，请重试');
             }
