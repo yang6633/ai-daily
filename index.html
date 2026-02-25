@@ -127,6 +127,10 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
+        .float-export-btn span {
+            display: none;
+        }
+
         .float-export-btn:hover {
             background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(255, 0, 170, 0.3));
             box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
@@ -494,15 +498,25 @@
             }
             
             #headerExportBtn {
-                padding: 0.4rem 0.6rem !important;
-                font-size: 0.7rem !important;
+                display: none;
             }
             
             .float-export-btn {
-                top: 4.5rem;
-                right: 0.8rem;
-                width: 40px;
-                height: 40px;
+                position: fixed;
+                top: 1rem;
+                right: 0.5rem;
+                width: auto;
+                height: auto;
+                padding: 0.4rem 0.6rem;
+                border-radius: 8px;
+                font-size: 0.7rem;
+                display: flex;
+                gap: 0.3rem;
+                align-items: center;
+            }
+            
+            .float-export-btn span {
+                display: inline;
             }
             
             .export-container {
@@ -555,11 +569,12 @@
     </header>
 
     <button onclick="exportAll()" class="float-export-btn" title="导出新闻海报">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
         </svg>
+        <span>导出</span>
     </button>
 
     <div class="ticker-wrap">
