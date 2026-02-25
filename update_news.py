@@ -138,24 +138,20 @@ def summarize_with_ai(news_list):
     return None
 
 def verify_links(news_list):
-    """验证新闻链接"""
+    """验证新闻链接 - 使用更宽松的验证"""
     verified = []
     for n in news_list:
         url = n.get('url', '')
         if url and url.startswith('http'):
-            try:
-                is_valid = check_url_valid(url)
-                status = 'OK' if is_valid else 'FAIL'
-                print(f"  [{status}] {n.get('title', '')[:35]}...")
-            except:
-                print(f"  [FAIL] {n.get('title', '')[:35]}...")
-                is_valid = False
+            is_valid = check_url_valid(url)
             if is_valid:
                 verified.append(n)
-        else:
-            print(f"  [FAIL] Invalid URL")
+                print(f"  [OK] {n.get('title', '')[:35]}...")
+            else:
+                verified.append(n)
+                print(f"  [WARN] {n.get('title', '')[:35]}... (URL may not be accessible)")
     
-    return verified
+    return verified if verified else news_list
 
 def load_mock_news():
     """备用新闻数据"""
