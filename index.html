@@ -762,7 +762,7 @@
         function renderNews(news) {
             const grid = document.getElementById('newsGrid');
             grid.innerHTML = news.map(item => {
-                const url = item.url || sourceUrls[item.source] || '#';
+                const url = sourceUrls[item.source] || item.url || '#';
                 return `
                 <div class="news-card">
                     <div class="news-rank">${item.rank}</div>
