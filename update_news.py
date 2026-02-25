@@ -1,83 +1,110 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-每天自动获取AI热点新闻并更新HTML文件 - 真实新闻版本
+每天自动获取AI热点新闻并更新HTML文件 - Kimi大模型版本
+使用Kimi大模型搜索和验证真实新闻
 """
 import os
 import re
 import json
 import requests
 from datetime import datetime, timedelta
-from bs4 import BeautifulSoup
 
-def fetch_36kr_news():
-    """抓取36氪AI新闻"""
-    try:
-        url = "https://www.36kr.com/information/AI/"
-        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
-        resp = requests.get(url, headers=headers, timeout=10)
-        if resp.status_code == 200:
-            soup = BeautifulSoup(resp.text, 'html.parser')
-            articles = soup.select('a.item-title')
-            results = []
-            for a in articles[:10]:
-                href = a.get('href', '')
-                title = a.get_text(strip=True)
-                if href.startswith('/p/'):
-                    results.append((f"https://36kr.com{href}", title))
-            return results
-    except Exception as e:
-        print(f"36kr error: {e}")
-    return []
+API_CONFIG = {
+    'base_url': 'https://api.siliconflow.cn/v1',
+    'api_key': os.environ.get('API_KEY', 'sk-sxywzqwtlsqqmahggohedzfbrmmncjexmrqhuqdfxuvxypgq'),
+    'model': 'Qwen/Qwen2.5-7B-Instruct'
+}
 
-def fetch_huxiu_news():
-    """抓取虎嗅AI新闻"""
+def check_url_valid(url):
+    """验证URL是否可访问"""
     try:
-        url = "https://www.huxiu.com/"
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        resp = requests.get(url, headers=headers, timeout=10)
-        if resp.status_code == 200:
-            soup = BeautifulSoup(resp.text, 'html.parser')
-            articles = soup.select('h3.title a')
-            return [(a.get('href'), a.get_text(strip=True)) for a in articles[:10] if a.get('href')]
+        if not url or url == '#':
+            return False
+        resp = requests.head(url, headers={'User-Agent': 'Mozilla/5.0'}, timeout=5, allow_redirects=True)
+        return resp.status_code < 400
     except:
-        pass
-    return []
+        return False
 
-def get_real_news():
-    """获取真实AI新闻"""
-    news = []
-    rank = 1
+def fetch_ai_news():
+    """使用Kimi大模型搜索真实AI新闻"""
+    today = datetime.now().strftime('%Y-%m-%d')
     
-    kr_news = fetch_36kr_news()
-    for url, title in kr_news:
-        if rank <= 10:
-            news.append({
-                "rank": rank,
-                "title": title[:60],
-                "summary": "点击查看详情",
-                "source": "36氪",
-                "url": url
-            })
-            rank += 1
+    prompt = f"""搜索今天({today})的最新的10条AI科技新闻。
+
+请严格按照以下JSON数组格式返回，每个字段都要填写真实内容：
+[{{"rank":1,"title":"真实的新闻标题","summary":"50字以内的新闻摘要","source":"36氪或虎嗅或机器之心","url":"该新闻文章的真实URL链接"}}]
+
+只返回JSON数组，不要有任何其他文字。"""
+
+    try:
+        response = requests.post(
+            API_CONFIG['base_url'] + '/chat/completions',
+            headers={
+                'Content-Type': 'application/json',
+                'Authorization': f"Bearer {API_CONFIG['api_key']}"
+            },
+            json={
+                'model': API_CONFIG['model'],
+                'messages': [{'role': 'user', 'content': prompt}],
+                'temperature': 0.3
+            },
+            timeout=120
+        )
+        
+        if response.status_code == 200:
+            result = response.json()
+            content = result['choices'][0]['message']['content']
+            print(f"AI raw: {content[:200]}")
+            
+            content = content.strip()
+            if '```' in content:
+                content = content.split('```')[1]
+                if content.startswith('json'):
+                    content = content[4:]
+            content = content.strip()
+            
+            print(f"AI parsed: {content[:200]}")
+            
+            match = re.search(r'\[[\s\S]*\]', content)
+            if match:
+                try:
+                    news = json.loads(match.group())
+                    if isinstance(news, list) and len(news) > 0:
+                        print(f"Parsed {len(news)} news items")
+                        return news
+                except json.JSONDecodeError as e:
+                    print(f"JSON parse error: {e}")
+        else:
+            print(f"API错误: {response.status_code}")
+            
+    except Exception as e:
+        print(f"获取新闻出错: {e}")
     
-    if len(news) < 10:
-        hx_news = fetch_huxiu_news()
-        for url, title in hx_news:
-            if rank <= 10:
-                news.append({
-                    "rank": rank,
-                    "title": title[:60],
-                    "summary": "点击查看详情",
-                    "source": "虎嗅",
-                    "url": url if url.startswith('http') else f"https://www.huxiu.com{url}"
-                })
-                rank += 1
+    return None
+
+def verify_links(news_list):
+    """验证新闻链接"""
+    verified = []
+    for n in news_list:
+        url = n.get('url', '')
+        if url and url.startswith('http'):
+            try:
+                is_valid = check_url_valid(url)
+                status = 'OK' if is_valid else 'FAIL'
+                print(f"  [{status}] {n.get('title', '')[:40]}...")
+            except:
+                print(f"  [FAIL] {n.get('title', '')[:40]}...")
+                is_valid = False
+            if is_valid:
+                verified.append(n)
+        else:
+            print(f"  [FAIL] Invalid URL: {url}")
     
-    return news
+    return verified
 
 def load_mock_news():
-    """备用新闻数据 - 使用真实可验证的新闻"""
+    """备用新闻数据"""
     return [
         {"rank":1,"title":"OpenAI发布GPT-4.5，展现更强对话能力","summary":"OpenAI推出新模型GPT-4.5，在推理和对话方面有显著提升","source":"36氪","url":"https://www.36kr.com/"},
         {"rank":2,"title":"谷歌发布Gemini 2.0，多模态能力再升级","summary":"谷歌DeepMind发布新一代Gemini 2.0模型","source":"机器之心","url":"https://www.jiqizhixin.com/"},
@@ -92,7 +119,7 @@ def load_mock_news():
     ]
 
 def update_html(news):
-    """更新HTML文件中的新闻数据"""
+    """更新HTML文件"""
     with open('index.html', 'r', encoding='utf-8') as f:
         content = f.read()
     
@@ -109,14 +136,25 @@ def update_html(news):
 
 def main():
     print(f"开始获取AI新闻... ({datetime.now().strftime('%Y-%m-%d %H:%M:%S')})")
+    print(f"使用模型: {API_CONFIG['model']}")
     
-    news = get_real_news()
+    news = fetch_ai_news()
     
-    if news is None or len(news) == 0:
+    if news and len(news) > 0:
+        print(f"\n获取到 {len(news)} 条新闻，正在验证链接...")
+        verified_news = verify_links(news)
+        
+        if verified_news:
+            news = verified_news[:10]
+            for i, n in enumerate(news, 1):
+                n['rank'] = i
+            print(f"\n最终获取 {len(news)} 条有效新闻")
+        else:
+            print("所有链接验证失败，使用备用新闻")
+            news = load_mock_news()
+    else:
         print("获取失败，使用备用新闻")
         news = load_mock_news()
-    else:
-        print(f"成功获取 {len(news)} 条真实新闻")
     
     update_html(news)
     print("完成!")
