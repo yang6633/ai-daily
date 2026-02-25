@@ -876,10 +876,24 @@
 
         async function downloadImage() {
             const content = document.getElementById('exportContent');
+            const qrImg = content.querySelector('img');
+            
+            if (qrImg && qrImg.src.includes('qrserver')) {
+                qrImg.crossOrigin = 'anonymous';
+                await new Promise((resolve, reject) => {
+                    qrImg.onload = resolve;
+                    qrImg.onerror = resolve;
+                    if (qrImg.complete) resolve();
+                });
+                await new Promise(r => setTimeout(r, 500));
+            }
+            
             try {
                 const canvas = await html2canvas(content, {
                     backgroundColor: '#0a0a0f',
-                    scale: 2
+                    scale: 2,
+                    useCORS: true,
+                    allowTaint: true
                 });
                 const link = document.createElement('a');
                 link.download = `ai-daily-${new Date().toISOString().split('T')[0]}.png`;
