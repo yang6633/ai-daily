@@ -81,22 +81,23 @@ def check_url_valid(url):
         return False
 
 def summarize_with_ai(news_list):
-    """使用AI整理和筛选新闻"""
+    """使用AI整理和筛选新闻，并生成AI解读"""
     if not news_list:
         return []
     
     news_text = "\n".join([f"{i+1}. {n['title']} - {n['source']}" for i, n in enumerate(news_list[:15])])
     
-    prompt = f"""从以下AI科技新闻中筛选出10条最有价值、最有吸引力的新闻。
+    prompt = f"""从以下AI科技新闻中筛选出10条最有价值、最有吸引力的新闻，并为每条新闻添加AI解读。
 
 {news_text}
 
 要求：
 1. 标题要吸引人有悬念感，能引发点击欲望
 2. 50字以内但内容丰富的摘要
-3. 必须包含真实URL
-4. 返回JSON数组格式：
-[{{"rank":1,"title":"吸引人的标题","summary":"有价值的摘要","source":"来源","url":"链接"}}]
+3. 每条新闻添加50字以内的AI解读，分析新闻的影响和意义
+4. 必须包含真实URL
+5. 返回JSON数组格式：
+[{{"rank":1,"title":"吸引人的标题","summary":"有价值的摘要","analysis":"AI解读分析","source":"来源","url":"链接"}}]
 
 只返回JSON，不要其他文字。"""
 
@@ -156,16 +157,16 @@ def verify_links(news_list):
 def load_mock_news():
     """备用新闻数据"""
     return [
-        {"rank":1,"title":"重磅！OpenAI发布GPT-5，性能超越人类预期","summary":"OpenAI最新大模型GPT-5发布，在推理和多模态能力上有质的飞跃","source":"36氪","url":"https://www.36kr.com/"},
-        {"rank":2,"title":"突发！谷歌Gemini 3.0强势来袭，全面碾压GPT-4","summary":"谷歌发布Gemini 3.0，在多项测试中超越GPT-4，成最强AI模型","source":"机器之心","url":"https://www.jiqizhixin.com/"},
-        {"rank":3,"title":"英伟达H100供货充足，AI创业公司迎来黄金期","summary":"英伟达H100芯片产能提升，AI创业公司成本大幅下降","source":"虎嗅","url":"https://www.huxiu.com/"},
-        {"rank":4,"title":"国产大模型崛起！百度文心一言用户破亿","summary":"百度文心一言用户量突破1亿，国产AI应用生态加速形成","source":"量子位","url":"https://www.qbitai.com/"},
-        {"rank":5,"title":"AI Agent爆发！OpenAI、谷歌、微软全面布局","summary":"2026年AI Agent成为焦点，各大厂商竞相推出智能代理产品","source":"钛媒体","url":"https://www.tmtpost.com/"},
-        {"rank":6,"title":"炸裂！Sora全面开放，生成视频长度可达10分钟","summary":"OpenAI Sora视频生成工具全面开放，支持10分钟高清视频创作","source":"爱范儿","url":"https://www.ifanr.com/"},
-        {"rank":7,"title":" Anthropic放大招！Claude 4超越GPT-5成最强","summary":"Anthropic发布Claude 4，在多项测试中超越GPT-5","source":"极客公园","url":"https://www.geekpark.net/"},
-        {"rank":8,"title":"微软Copilot X发布，办公效率提升10倍","summary":"微软发布Copilot X，集成GPT-5能力，全面提升办公效率","source":"36氪","url":"https://www.36kr.com/"},
-        {"rank":9,"title":" Meta开源Llama 4，性能比肩GPT-5","summary":"Meta发布Llama 4开源模型，性能直追GPT-5完全版","source":"虎嗅","url":"https://www.huxiu.com/"},
-        {"rank":10,"title":" AI手机时代来临！苹果华为小米全面接入AI","summary":"主流手机厂商全面接入AI功能，AI手机成2026最大风口","source":"量子位","url":"https://www.qbitai.com/"}
+        {"rank":1,"title":"重磅！OpenAI发布GPT-5，性能超越人类预期","summary":"OpenAI最新大模型GPT-5发布，在推理和多模态能力上有质的飞跃","analysis":"GPT-5的发布标志着AI能力进入新阶段，对各行业将产生深远影响，特别是内容创作和代码编写领域。","source":"36氪","url":"https://www.36kr.com/"},
+        {"rank":2,"title":"突发！谷歌Gemini 3.0强势来袭，全面碾压GPT-4","summary":"谷歌发布Gemini 3.0，在多项测试中超越GPT-4，成最强AI模型","analysis":"谷歌在AI领域的持续投入显现成效，Gemini 3.0的多模态能力领先，将加剧AI竞争格局。","source":"机器之心","url":"https://www.jiqizhixin.com/"},
+        {"rank":3,"title":"英伟达H100供货充足，AI创业公司迎来黄金期","summary":"英伟达H100芯片产能提升，AI创业公司成本大幅下降","analysis":"芯片供应充足将降低AI创业门槛，推动更多AI应用落地，对整个行业发展是重大利好。","source":"虎嗅","url":"https://www.huxiu.com/"},
+        {"rank":4,"title":"国产大模型崛起！百度文心一言用户破亿","summary":"百度文心一言用户量突破1亿，国产AI应用生态加速形成","analysis":"用户破亿标志着国产大模型获得市场认可，将带动更多国产AI应用和生态发展。","source":"量子位","url":"https://www.qbitai.com/"},
+        {"rank":5,"title":"AI Agent爆发！OpenAI、谷歌、微软全面布局","summary":"2026年AI Agent成为焦点，各大厂商竞相推出智能代理产品","analysis":"AI Agent代表AI应用的新范式，将让人机交互更加自然，可能改变未来工作方式。","source":"钛媒体","url":"https://www.tmtpost.com/"},
+        {"rank":6,"title":"炸裂！Sora全面开放，生成视频长度可达10分钟","summary":"OpenAI Sora视频生成工具全面开放，支持10分钟高清视频创作","analysis":"Sora将颠覆视频内容创作行业，大幅降低视频制作门槛，影视行业面临变革。","source":"爱范儿","url":"https://www.ifanr.com/"},
+        {"rank":7,"title":" Anthropic放大招！Claude 4超越GPT-5成最强","summary":"Anthropic发布Claude 4，在多项测试中超越GPT-5","analysis":"Anthropic持续在AI安全性和能力上突破，Claude 4将推动行业向更安全AI发展。","source":"极客公园","url":"https://www.geekpark.net/"},
+        {"rank":8,"title":"微软Copilot X发布，办公效率提升10倍","summary":"微软发布Copilot X，集成GPT-5能力，全面提升办公效率","analysis":"Copilot X将深度融入Office套件，显著提升办公效率，可能是最具商业价值的AI产品。","source":"36氪","url":"https://www.36kr.com/"},
+        {"rank":9,"title":" Meta开源Llama 4，性能比肩GPT-5","summary":"Meta发布Llama 4开源模型，性能直追GPT-5完全版","analysis":"开源Llama 4将降低AI应用开发门槛，促进AI技术民主化，更多开发者将受益。","source":"虎嗅","url":"https://www.huxiu.com/"},
+        {"rank":10,"title":" AI手机时代来临！苹果华为小米全面接入AI","summary":"主流手机厂商全面接入AI功能，AI手机成2026最大风口","analysis":"AI手机将成为消费电子新增长点，普通用户将更便捷体验AI能力。","source":"量子位","url":"https://www.qbitai.com/"}
     ]
 
 def get_rss_news():

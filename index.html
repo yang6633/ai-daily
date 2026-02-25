@@ -281,7 +281,26 @@
             font-size: 0.9rem;
             color: var(--text-dim);
             line-height: 1.6;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .news-analysis {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1), rgba(255, 0, 170, 0.1));
+            border-left: 3px solid #00f0ff;
+            padding: 0.8rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 0.8rem;
+            font-size: 0.85rem;
+            color: #aaaacc;
+            line-height: 1.5;
+        }
+
+        .news-analysis-label {
+            color: #00f0ff;
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-bottom: 0.3rem;
+            display: block;
         }
 
         .news-meta {
@@ -784,11 +803,13 @@
             const grid = document.getElementById('newsGrid');
             grid.innerHTML = news.map(item => {
                 const url = sourceUrls[item.source] || item.url || '#';
+                const analysis = item.analysis ? `<div class="news-analysis"><span class="news-analysis-label">AI解读</span>${item.analysis}</div>` : '';
                 return `
                 <div class="news-card">
                     <div class="news-rank">${item.rank}</div>
                     <h3 class="news-title">${item.title}</h3>
                     <p class="news-summary">${item.summary}</p>
+                    ${analysis}
                     <div class="news-meta">
                         <span class="news-source">${item.source}</span>
                         <a href="${url}" target="_blank" class="original-link">
