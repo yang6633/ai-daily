@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 API_CONFIG = {
     'base_url': 'https://api.siliconflow.cn/v1',
     'api_key': os.environ.get('API_KEY', 'sk-sxywzqwtlsqqmahggohedzfbrmmncjexmrqhuqdfxuvxypgq'),
-    'model': 'Qwen/Qwen2.5-7B-Instruct'
+    'model': 'Qwen/Qwen2.5-72B-Instruct-128K'
 }
 
 def check_url_valid(url):
