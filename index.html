@@ -803,7 +803,7 @@
         function renderNews(news) {
             const grid = document.getElementById('newsGrid');
             grid.innerHTML = news.map(item => {
-                const url = sourceUrls[item.source] || item.url || '#';
+                const url = item.url && item.url.startsWith('http') ? item.url : (sourceUrls[item.source] || '#');
                 const analysis = item.analysis ? `<div class="news-analysis"><span class="news-analysis-label">AI解读</span>${item.analysis}</div>` : '';
                 return `
                 <div class="news-card">
