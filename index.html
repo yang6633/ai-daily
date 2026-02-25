@@ -109,22 +109,7 @@
         }
 
         .float-export-btn {
-            position: fixed;
-            top: 5rem;
-            right: 1.5rem;
-            z-index: 999;
-            background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(255, 0, 170, 0.15));
-            border: 1px solid rgba(0, 240, 255, 0.4);
-            color: #00f0ff;
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: none;
         }
 
         .float-export-btn span {
@@ -207,6 +192,24 @@
             display: flex;
             align-items: center;
             gap: 1rem;
+        }
+
+        .export-all-header-btn {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(255, 0, 170, 0.2));
+            border: 1px solid rgba(0, 240, 255, 0.4);
+            color: #00f0ff;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .export-all-header-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(255, 0, 170, 0.3));
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
         }
 
         .section-title::before {
@@ -516,19 +519,27 @@
                 gap: 0.5rem;
             }
             
+            main > div {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            main .section-title {
+                font-size: 1.2rem;
+            }
+            
+            .export-all-header-btn {
+                font-size: 0.7rem;
+                padding: 0.4rem 0.6rem;
+            }
+            
             #headerExportBtn {
                 display: none;
             }
             
             .float-export-btn {
-                position: fixed;
-                top: 1rem;
-                right: 0.5rem;
-                width: auto;
-                height: auto;
-                padding: 0.5rem 0.8rem;
-                border-radius: 8px;
-                font-size: 0.75rem;
+                display: none;
+            }
                 display: flex;
                 gap: 0.3rem;
                 align-items: center;
@@ -595,20 +606,13 @@
         <div class="header-content">
             <div class="logo">AI DAILY</div>
             <div style="display: flex; align-items: center; gap: 1rem;">
-                <button onclick="exportAll()" id="headerExportBtn" style="background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(255, 0, 170, 0.2)); border: 1px solid rgba(0, 240, 255, 0.3); color: #00f0ff; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;">导出新闻海报</button>
+                <button onclick="exportAll()" id="headerExportBtn" style="display:none;">导出新闻海报</button>
                 <div class="date-display" id="currentDate"></div>
             </div>
         </div>
     </header>
 
-    <button onclick="exportAll()" class="float-export-btn" title="导出新闻海报">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-        <span>导出新闻海报</span>
-    </button>
+    <button onclick="exportAll()" class="float-export-btn" title="导出新闻海报" style="display:none;">
 
     <div class="ticker-wrap">
         <div class="ticker" id="ticker">
@@ -616,7 +620,10 @@
     </div>
 
     <main>
-        <h2 class="section-title">今日AI十大热点</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 class="section-title" style="margin: 0;">今日AI十大热点</h2>
+            <button onclick="exportAll()" class="export-all-header-btn">导出新闻海报</button>
+        </div>
         <div class="news-grid" id="newsGrid"></div>
     </main>
 
